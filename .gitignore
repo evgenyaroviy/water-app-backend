@@ -1,0 +1,12 @@
+//.gitignore
+
+/node_modules
+
+.env
+
+.vscode
+.DS_Store
+.idea
+
+#Pull-requests list
+pullrequests-list.txt
