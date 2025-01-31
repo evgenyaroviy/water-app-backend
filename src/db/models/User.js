@@ -2,33 +2,42 @@ import { model, Schema } from 'mongoose';
 import { emailRegExp } from '../../constants/users.js';
 import {handleSaveError} from './hooks.js';
 
+export const genderList = ['woman', 'man'];
+
 const userSchema = new Schema({
   name: {
     type: String,
-    required: true
   },
   email: {
     type: String,
-    required: true,
     unique: true,
     match: emailRegExp
   },
   password: {
     type: String,
-    required: true
   },
-  // verify: {
-  //   type: Boolean,
-  //   default: false,
-  //   required: true,
-  // },
-  
-},
+  newPassword: {
+    type: String,
+  },
+  gender: {
+    type: String,
+    default: 'woman',
+    enum: genderList,
+  },
+  photo: {
+      type: String,
+    },
+  },
 {
     versionKey: false, timestamps: true,
   });
 
 userSchema.post('save', handleSaveError);
+
+userSchema.methods.updatePassword = function(newPassword) {
+  this.password = newPassword;
+  this.newPassword = undefined; // Очищення поля newPassword після оновлення
+};
 
 const UserCollection = model('user', userSchema);
 export default UserCollection;

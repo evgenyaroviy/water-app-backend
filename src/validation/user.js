@@ -1,16 +1,16 @@
 import Joi from 'joi';
+import { emailRegExp } from "../constants/users.js";
+import { genderList } from '../db/models/User.js';
 
-
-export const contactAddSchema = Joi.object({
-    name: Joi.string().min(3).max(20).required(),
-    phoneNumber: Joi.string().min(3).max(20).required(),
-    email: Joi.string().min(3).max(20),
-    isFavourite: Joi.boolean(),
+export const userLoginSchema = Joi.object({
+    email: Joi.string().pattern(emailRegExp).required(),
+    password: Joi.string().min(8).max(64).required(),
 });
 
-export const contactUpdateSchema = Joi.object({
+export const userUpdateSchema = Joi.object({
     name: Joi.string().min(3).max(20),
-    phoneNumber: Joi.string().min(3).max(20),
-    email: Joi.string().min(3).max(20),
-    isFavourite: Joi.boolean(),
+    email: Joi.string().pattern(emailRegExp),
+    password: Joi.string().min(8).max(64),
+    newPassword: Joi.string().min(8).max(64),
+    gender: Joi.string().valid(...genderList),
 });

@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import {handleSaveError} from './hooks.js';
 
 
 const waterInputSchema = new Schema(
@@ -23,22 +24,10 @@ const waterInputSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-waterInputSchema.post("save", (error, doc, next)=> {
-error.status = 400;
-next();
-});
+waterInputSchema.post('save', handleSaveError);
 
-waterInputSchema.pre("findOneAndUpdate", function(next) {
-    this.options.new = true,
-    this.options.runValidators = true,
-next();
-});
+waterInputSchema.pre('findOneAndUpdate', handleSaveError);
 
-waterInputSchema.post("findOneAndUpdate", (error, doc, next)=> {
-  error.status = 400;
-  next();
-  });
-
-  export const sortByList = ['name'];
+waterInputSchema.post('findOneAndUpdate', handleSaveError);
 
 export const WaterInput  = model('waterInput', waterInputSchema);

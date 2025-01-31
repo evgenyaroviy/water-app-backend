@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 import {handleSaveError} from './hooks.js';
 
 const sessionSchema = new Schema({
-    userId: {
+    owner: {
         type: Schema.Types.ObjectId,
         ref: 'user',
     },
