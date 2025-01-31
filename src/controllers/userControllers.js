@@ -1,9 +1,8 @@
 import createHttpError from 'http-errors';
-import * as contactService from "../services/contacts.js";
+import * as contactService from "../services/userServices.js";
 
 import { saveFileToUploadsDir } from '../utils/saveFileToUploadsDir.js';
 import { saveFileToCloud } from '../utils/saveFileToCloud.js';
-import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseContactsFilterParams } from '../utils/filters/parseFilterParams.js';
 
@@ -12,7 +11,10 @@ import { getEnvVar } from '../utils/getEnvVar.js';
     const cloudenaryEnable = getEnvVar('CLOUDINARY_ENABLE') === 'true';
 
 
+    
+
 export const getContactsController = async (req, res) => {
+    const parsePaginationParams = (query) => {};  // для прибирання помилки
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
     const filter = parseContactsFilterParams(req.query);

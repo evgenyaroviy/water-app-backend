@@ -1,6 +1,7 @@
 // src/services/contacts.js 
-import { ContactsCollection } from "../db/models/contacts.js";
-import { calculatePaginationData } from "../utils/calculatePaginationData.js";
+import { calculateWater } from "../utils/calculateWater.js";
+
+const ContactsCollection = 1;  // для прибирання помилки
 
 export const getAllContacts = async ({
     page = 1, 
@@ -12,6 +13,7 @@ export const getAllContacts = async ({
   try {
   const limit = perPage;
   const skip = (page - 1) * limit;
+  
   const contactsQuery = ContactsCollection.find();
 
   if (filter.isFavourite !== undefined) {
@@ -28,7 +30,7 @@ export const getAllContacts = async ({
   // if (totalItems == null) {
   //   throw new Error('Total items not calculated correctly');
   // }
-  const paginationData = calculatePaginationData(totalItems, page, perPage);
+  const paginationData = calculateWater(totalItems, page, perPage);
 
   return {
     data,

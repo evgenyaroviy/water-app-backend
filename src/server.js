@@ -4,14 +4,10 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { getEnvVar } from './utils/getEnvVar.js';
 
-import {
-  authRouter,
-  userRouter,
-  waterRateRouter,
-  waterRouter,
-  todayWaterRouter,
-  monthWaterRouter,
-} from "./routers/index.js  ";
+import authRouter from './routers/auth.js';
+import userRouter from './routers/user.js';
+// import { water, waterRate, todayWater, monthWater } from './routers/water.js';
+
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -37,10 +33,10 @@ export const setupServer = () => {
 
   app.use('/auth', authRouter);
   app.use("/users", userRouter);
-  app.use("/water-rate", waterRateRouter);
-  app.use("/water", waterRouter);
-  app.use("/today", todayWaterRouter);
-  app.use("/month", monthWaterRouter);
+  // app.use("/water-rate", waterRate);
+  // app.use("/water", water);
+  // app.use("/today", todayWater);
+  // app.use("/month", monthWater);
   app.use('/api-docs', swaggerDocs());
 
 
