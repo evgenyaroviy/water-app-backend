@@ -4,14 +4,14 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { getEnvVar } from './utils/getEnvVar.js';
 
-import authRouter from './routers/auth.js';
-import userRouter from './routers/user.js';
+// import authRouter from './routers/auth.js';
+// import userRouter from './routers/user.js';
 // import { water, waterRate, todayWater, monthWater } from './routers/water.js';
 
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-import { swaggerDocs } from './middlewares/swaggerDocs.js';
+// import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const PORT = Number(getEnvVar('PORT', 3000));
 
@@ -31,13 +31,13 @@ export const setupServer = () => {
   app.use(corsMiddleware);
   // app.use(logger);
 
-  app.use('/auth', authRouter);
-  app.use("/users", userRouter);
+  // app.use('/auth', authRouter);
+  // app.use("/users", userRouter);
   // app.use("/water-rate", waterRate);
   // app.use("/water", water);
   // app.use("/today", todayWater);
   // app.use("/month", monthWater);
-  app.use('/api-docs', swaggerDocs());
+  // app.use('/api-docs', swaggerDocs());
 
 
   app.use('*', notFoundHandler);
