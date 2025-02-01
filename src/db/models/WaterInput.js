@@ -1,33 +1,49 @@
 import { model, Schema } from 'mongoose';
-import {handleSaveError} from './hooks.js';
+import { handleSaveError } from '../../middlewares/errorHandler.js';
+import { WATER_CONSTANTS } from '../../constants/water.js';
 
+const waterEntrySchema = new Schema({
+  amountWater: {
+    type: Number,
+    required: true,
+    min: WATER_CONSTANTS.MIN_WATER_AMOUNT,
+    max: WATER_CONSTANTS.MAX_WATER_AMOUNT,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
+});
 
-const waterInputSchema = new Schema(
+const waterSchema = new Schema(
   {
-    waterVolume: {
+    entries: [waterEntrySchema],
+    totalAmount: {
       type: Number,
-      min: 1,
-      max: 5000,
-      required: [true, "Enter the value of the water used"],
+      default: 0,
+    },
+    dailyNorm: {
+      type: Number,
+      default: WATER_CONSTANTS.DEFAULT_DAILY_NORM,
     },
     date: {
       type: Date,
       default: Date.now,
-      required: [true, "Enter the time of entering"],
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
       required: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
-waterInputSchema.post('save', handleSaveError);
+waterSchema.post('save', handleSaveError);
+waterSchema.pre('findOneAndUpdate', handleSaveError);
+waterSchema.post('findOneAndUpdate', handleSaveError);
 
-waterInputSchema.pre('findOneAndUpdate', handleSaveError);
-
-waterInputSchema.post('findOneAndUpdate', handleSaveError);
-
-export const WaterInput  = model('waterInput', waterInputSchema);
+export const Water = model('water', waterSchema);

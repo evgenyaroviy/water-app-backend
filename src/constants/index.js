@@ -1,4 +1,6 @@
 import path from 'path';
+import { WATER_CONSTANTS, TIME_FORMATS, MONTH_NAMES } from './water.js';
+import { emailRegExp, accessTokenLifetime, refreshTokenLifetime } from './users.js';
 
 export const TEMPLATE_DIR = path.resolve('src', 'templates');
 
@@ -17,3 +19,12 @@ export const SMTP = {
 };
 
 export const SWAGGER_PATH = path.resolve('docs', 'swagger.json');
+
+export {
+  WATER_CONSTANTS,
+  TIME_FORMATS,
+  MONTH_NAMES,
+  emailRegExp,
+  accessTokenLifetime,
+  refreshTokenLifetime,
+};

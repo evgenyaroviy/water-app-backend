@@ -3,11 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { getEnvVar } from './utils/getEnvVar.js';
+import helmet from 'helmet';
 
 // import authRouter from './routers/auth.js';
 // import userRouter from './routers/user.js';
-// import { water, waterRate, todayWater, monthWater } from './routers/water.js';
-
+import waterRouter from './routers/water.js';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -17,6 +17,38 @@ const PORT = Number(getEnvVar('PORT', 3000));
 
 export const setupServer = () => {
   const app = express();
+
+  // Настройка helmet для безопасности
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", 'data:', 'https:'],
+          connectSrc: ["'self'", 'https:'],
+        },
+      },
+      crossOriginEmbedderPolicy: true,
+      crossOriginOpenerPolicy: true,
+      crossOriginResourcePolicy: true,
+      dnsPrefetchControl: true,
+      frameguard: { action: 'deny' },
+      hidePoweredBy: true,
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      },
+      ieNoOpen: true,
+      noSniff: true,
+      originAgentCluster: true,
+      permittedCrossDomainPolicies: true,
+      referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+      xssFilter: true,
+    }),
+  );
 
   const corsMiddleware = cors();
   app.use(express.json());
@@ -37,11 +69,11 @@ export const setupServer = () => {
   // app.use("/water", water);
   // app.use("/today", todayWater);
   // app.use("/month", monthWater);
+  app.use('/api/water', waterRouter);
   app.use('/api-docs', swaggerDocs());
 
-
   app.use('*', notFoundHandler);
-  
+
   app.use(errorHandler);
 
   app.listen(PORT, () => {
