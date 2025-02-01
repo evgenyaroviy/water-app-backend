@@ -25,8 +25,14 @@ const userSchema = new Schema({
     enum: genderList,
   },
   photo: {
-      type: String,
-    },
+    type: String,
+  },
+  waterRate: {
+    type: Number,
+    min: 1,
+    max: 15000,
+    default: 2000
+  },
   },
 {
     versionKey: false, timestamps: true,

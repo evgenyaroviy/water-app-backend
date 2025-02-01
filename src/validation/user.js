@@ -14,3 +14,7 @@ export const userUpdateSchema = Joi.object({
     newPassword: Joi.string().min(8).max(64),
     gender: Joi.string().valid(...genderList),
 });
+
+export const userWaterRateSchema = Joi.object({
+    waterRate: Joi.number().min(1).max(15000).required()
+});

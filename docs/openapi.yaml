@@ -1,0 +1,66 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contact App
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: Contact book
+tags:
+  - name: Auth
+    description: Authorization endpoints.
+  - name: User
+    description: User profile endpoints.
+  - name: Water
+    description: Operations about Water.
+servers:
+  - url: https://nodejs-hw-mongodb-q121.onrender.com/api-docs
+  - url: http://localhost:3000
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Register user
+      $ref: ../swagger/schemas/auth/signUp.yaml
+  /auth/signin:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      $ref: ../swagger/schemas/auth/signIn.yaml
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout user
+      $ref: ../swagger/schemas/auth/logout.yaml
+  /auth/reset-password:
+    post:
+      tags:
+        - Auth
+      summary: Reset password
+      $ref: ../swagger/schemas/auth/resetPassword.yaml
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: Get current user info
+      $ref: ../swagger/paths/user/{id}/get.yaml
+    patch: 
+      tags:
+        - User
+      summary: Update user info
+      $ref: ../swagger/paths/user/{id}/patch.yaml
+  /user/{id}/avatar:
+    patch:
+      tags:
+        - User
+      summary: Upload user avatar
+      $ref: ../swagger/paths/user/{id}/avatar/patch.yaml
+  
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
