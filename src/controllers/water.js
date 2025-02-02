@@ -174,3 +174,4 @@ export const waterController = {
   getTodayStats: ctrlWrapper(getTodayStats),
   getMonthlyStats: ctrlWrapper(getMonthlyStats),
 };
+
