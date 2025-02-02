@@ -1,0 +1,31 @@
+type: object
+required:
+  - _id
+  - email
+  - password
+properties:
+  _id:
+    description: "User's id"
+    type: string
+    example: 65e4decdd286b30065d54af9
+  name:
+    description: "User's name"
+    type: string
+    example: 'John Doe'
+  email:
+    description: "User's email"
+    type: string
+    example: example@gmail.com
+  gender:
+    description: "User's gender"
+    type: string
+    enum: ['woman', 'man']
+    example: woman
+  waterRate:
+    description: "User's water rate"
+    type: number
+    example: 2000
+  photo:
+    description: "Link to user's photo"
+    type: string
+    example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
