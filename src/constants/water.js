@@ -1,5 +1,3 @@
-export const contactTypeList = ['work', 'home', 'personal'];
-
 export const WATER_CONSTANTS = {
   MIN_WATER_AMOUNT: 1,
   MAX_WATER_AMOUNT: 15000,
