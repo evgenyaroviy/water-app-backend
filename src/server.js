@@ -1,12 +1,12 @@
 import express from 'express';
-// import pino from 'pino-http';
+import pinoHttp from 'pino-http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { getEnvVar } from './utils/getEnvVar.js';
 import helmet from 'helmet';
 
-// import authRouter from './routers/auth.js';
-// import userRouter from './routers/user.js';
+import authRouter from './routers/auth.js';
+import userRouter from './routers/user.js';
 import waterRouter from './routers/water.js';
 
 import { errorHandler } from './middlewares/errorHandler.js';
@@ -54,23 +54,29 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(express.static('uploads'));
   app.use(cookieParser());
-  // const logger = pino({
-  //   transport: {
-  //     target: 'pino-pretty',
-  //   },
-  // });
+
+  const logger = pinoHttp({
+    transport: {
+      target: 'pino-pretty',
+    },
+  });
 
   app.use(corsMiddleware);
-  // app.use(logger);
+  app.use(logger);
 
-  // app.use('/auth', authRouter);
-  // app.use("/users", userRouter);
-  // app.use("/water-rate", waterRate);
-  // app.use("/water", water);
-  // app.use("/today", todayWater);
-  // app.use("/month", monthWater);
+  app.use((req, res, next) => {
+    console.log('Incoming request:', {
+      method: req.method,
+      path: req.path,
+      body: req.body,
+    });
+    next();
+  });
+
+  app.use('/users', userRouter);
   app.use('/water', waterRouter);
   app.use('/api-docs', swaggerDocs());
+  app.use('/auth', authRouter);
 
   app.use('*', notFoundHandler);
 

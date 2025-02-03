@@ -8,7 +8,7 @@ import fs from 'node:fs/promises';
 import { SMTP, TEMPLATE_DIR } from '../constants/index.js';
 
 import { User } from '../db/models/User.js';
-import { SessionCollection } from '../db/models/Session.js';
+import { Session } from '../db/models/Session.js';
 
 import { createSession } from '../utils/createSession.js';
 import { sendEmail } from '../utils/sendEmail.js';
@@ -39,22 +39,22 @@ export const loginUser = async (payload) => {
     throw createHttpError(401, 'Unauthorized');
   }
 
-  await SessionCollection.deleteOne({ owner: user._id });
+  await Session.deleteOne({ owner: user._id });
 
   const newSession = createSession();
 
-  return await SessionCollection.create({
+  return await Session.create({
     owner: user._id,
     ...newSession,
   });
 };
 
 export const logoutUser = async (sessionId) => {
-  await SessionCollection.deleteOne({ _id: sessionId });
+  await Session.deleteOne({ _id: sessionId });
 };
 
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
-  const session = await SessionCollection.findOne({
+  const session = await Session.findOne({
     _id: sessionId,
     refreshToken,
   });
@@ -72,9 +72,9 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
 
   const newSession = createSession();
 
-  await SessionCollection.deleteOne({ _id: sessionId, refreshToken });
+  await Session.deleteOne({ _id: sessionId, refreshToken });
 
-  return await SessionCollection.create({
+  return await Session.create({
     owner: session.owner,
     ...newSession,
   });

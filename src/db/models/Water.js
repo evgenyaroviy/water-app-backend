@@ -2,22 +2,27 @@ import { model, Schema } from 'mongoose';
 import { handleSaveError } from '../../middlewares/errorHandler.js';
 import { WATER_CONSTANTS } from '../../constants/water.js';
 
-const waterEntrySchema = new Schema({
-  amountWater: {
-    type: Number,
-    required: true,
-    min: WATER_CONSTANTS.MIN_WATER_AMOUNT,
-    max: WATER_CONSTANTS.MAX_WATER_AMOUNT,
-  },
-  time: {
-    type: String,
-    required: true,
-  },
-});
-
 const waterSchema = new Schema(
   {
-    entries: [waterEntrySchema],
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    waterVolume: {
+      type: Number,
+      required: true,
+      min: WATER_CONSTANTS.MIN_WATER_AMOUNT,
+      max: WATER_CONSTANTS.MAX_WATER_AMOUNT,
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+    time: {
+      type: String,
+      required: true,
+    },
     totalAmount: {
       type: Number,
       default: 0,
@@ -25,15 +30,6 @@ const waterSchema = new Schema(
     dailyNorm: {
       type: Number,
       default: WATER_CONSTANTS.DEFAULT_DAILY_NORM,
-    },
-    date: {
-      type: Date,
-      default: Date.now,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'user',
-      required: true,
     },
   },
   {
