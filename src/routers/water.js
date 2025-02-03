@@ -18,7 +18,7 @@ const routes = {
   monthlyStats: '/month/:date',
 };
 
-//Add water
+// Добавление воды
 waterRouter.post(
   routes.addEntry,
   authenticate,
@@ -26,7 +26,7 @@ waterRouter.post(
   waterController.addWater,
 );
 
-//Update water
+// Обновление записи
 waterRouter.put(
   routes.updateEntry,
   authenticate,
@@ -35,7 +35,7 @@ waterRouter.put(
   waterController.updateWater,
 );
 
-//Delete water
+// Удаление записи
 waterRouter.delete(
   routes.deleteEntry,
   authenticate,
@@ -43,10 +43,10 @@ waterRouter.delete(
   waterController.deleteWater,
 );
 
-//Get water today
+// Получение статистики за сегодня
 waterRouter.get(routes.dailyStats, authenticate, waterController.getTodayStats);
 
-//Get water month
+// Получение статистики за месяц
 waterRouter.get(
   routes.monthlyStats,
   authenticate,
@@ -55,4 +55,3 @@ waterRouter.get(
 );
 
 export default waterRouter;
-

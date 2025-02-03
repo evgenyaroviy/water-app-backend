@@ -69,7 +69,7 @@ export const setupServer = () => {
   // app.use("/water", water);
   // app.use("/today", todayWater);
   // app.use("/month", monthWater);
-  app.use('/api/water', waterRouter);
+  app.use('/water', waterRouter);
   app.use('/api-docs', swaggerDocs());
 
   app.use('*', notFoundHandler);
