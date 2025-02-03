@@ -4,55 +4,30 @@ import { schemas } from '../Shemas/water.js';
 import { waterController } from '../controllers/water.js';
 import {
   authenticate,
-  isValidId,
+ 
   isValidateMonth,
 } from '../middlewares/index.js';
 
 const waterRouter = express.Router();
 
-const routes = {
-  addEntry: '/add',
-  updateEntry: '/update/:entryId',
-  deleteEntry: '/:entryId',
-  dailyStats: '/today',
-  monthlyStats: '/month/:date',
-};
+waterRouter.use(authenticate);
 
-//Add water
-waterRouter.post(
-  routes.addEntry,
-  authenticate,
-  validateBody(schemas.entriesWaterSchemas),
-  waterController.addWater,
-);
 
-//Update water
-waterRouter.put(
-  routes.updateEntry,
-  authenticate,
-  isValidId,
-  validateBody(schemas.updateWaterSchemas),
-  waterController.updateWater,
-);
+waterRouter.get('/', waterController.getAllWater);
+waterRouter.post('/', waterController.addWater);
+waterRouter.put('/:waterId', waterController.updateWater);
+waterRouter.delete('/:waterId', waterController.deleteWater);
 
-//Delete water
-waterRouter.delete(
-  routes.deleteEntry,
-  authenticate,
-  isValidId,
-  waterController.deleteWater,
-);
-
-//Get water today
-waterRouter.get(routes.dailyStats, authenticate, waterController.getTodayStats);
-
-//Get water month
+waterRouter.get('/today', waterController.getTodayStats);
 waterRouter.get(
-  routes.monthlyStats,
-  authenticate,
+  '/month/:date',
   isValidateMonth,
   waterController.getMonthlyStats,
 );
+waterRouter.patch(
+  '/daily-norm',
+  validateBody(schemas.updateDailyNormSchema),
+  waterController.updateDailyNorm,
+);
 
 export default waterRouter;
-

@@ -1,31 +1,15 @@
-import { Router } from 'express';
-
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { validateBody } from '../utils/validateBody.js';
-
-import { isValidId } from '../middlewares/index.js';
-import { upload } from '../middlewares/upload.js';
-import { authenticate } from '../middlewares/authenticate.js';
-
-import { userUpdateSchema } from '../validation/user.js';
-
+import express from 'express';
 import {
   getUserByIdController,
   updateUserController,
 } from '../controllers/userControllers.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
-const userRouter = Router();
+const router = express.Router();
 
-userRouter.use(authenticate);
+router.use(authenticate); // Защищаем все маршруты
 
-userRouter.get('/:userId', isValidId, ctrlWrapper(getUserByIdController));
+router.get('/:userId', getUserByIdController);
+router.put('/:userId', updateUserController);
 
-userRouter.patch(
-  '/:userId',
-  isValidId,
-  upload.single('photo'),
-  validateBody(userUpdateSchema),
-  ctrlWrapper(updateUserController),
-);
-
-export default userRouter;
+export default router;

@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { emailRegExp } from '../../constants/users.js';
 import { handleSaveError } from './hooks.js';
+import bcrypt from 'bcryptjs';
 
 export const genderList = ['woman', 'man'];
 
@@ -47,5 +48,17 @@ userSchema.methods.updatePassword = function (newPassword) {
   this.password = newPassword;
   this.newPassword = undefined; // Очищення поля newPassword після оновлення
 };
+
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+// Хеширование пароля перед сохранением
+userSchema.pre('save', async function(next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
 
 export const User = model('user', userSchema);

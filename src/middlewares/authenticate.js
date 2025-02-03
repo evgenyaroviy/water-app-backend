@@ -1,46 +1,44 @@
-import createHttpError from 'http-errors';
-
-import SessionCollection from '../db/models/Session.js';
-import { User } from '../db/models/User.js';
+import { Session } from '../db/models/Session.js';
 
 export const authenticate = async (req, res, next) => {
-  const authHeader = req.get('Authorization');
+  try {
+    const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    next(createHttpError(401, 'Please provide Authorization header'));
-    return;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        status: 401,
+        message: 'UnauthorizedError',
+        data: {
+          message: 'No token provided',
+        },
+      });
+    }
+
+    const accessToken = authHeader.split(' ')[1];
+    const session = await Session.findOne({
+      accessToken,
+      accessTokenValidUntil: { $gt: new Date() },
+    });
+
+    if (!session) {
+      return res.status(401).json({
+        status: 401,
+        message: 'UnauthorizedError',
+        data: {
+          message: 'Session not found',
+        },
+      });
+    }
+
+    req.user = { id: session.userId };
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      status: 401,
+      message: 'UnauthorizedError',
+      data: {
+        message: error.message,
+      },
+    });
   }
-
-  const bearer = authHeader.split(' ')[0];
-  const token = authHeader.split(' ')[1];
-
-  if (bearer !== 'Bearer' || !token) {
-    next(createHttpError(401, 'Auth header should be of type Bearer'));
-    return;
-  }
-
-  const session = await SessionCollection.findOne({ accessToken: token });
-
-  if (!session) {
-    next(createHttpError(401, 'Session not found'));
-    return;
-  }
-
-  const isAccessTokenExpired =
-    new Date() > new Date(session.accessTokenValidUntil);
-
-  if (isAccessTokenExpired) {
-    next(createHttpError(401, 'Access token expired'));
-  }
-
-  const user = await User.findById(session.owner);
-
-  if (!user) {
-    next(createHttpError(401));
-    return;
-  }
-
-  req.user = user;
-
-  next();
 };

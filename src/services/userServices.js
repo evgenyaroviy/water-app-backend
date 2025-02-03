@@ -1,37 +1,39 @@
 import createHttpError from 'http-errors';
 
-import SessionCollection from '../db/models/Session.js';
 import { User } from '../db/models/User.js';
 
 export const getUserById = async (userId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    throw createHttpError(404, 'User not found');
-  }
+  try {
+    const user = await User.findById(userId).select('-password');
 
-  const session = await SessionCollection.findOne({ owner: userId });
-  if (!session) {
-    throw createHttpError(401, 'Session not found');
-  }
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
 
-  const isSessionTokenExpired =
-    new Date() > new Date(session.refreshTokenValidUntil);
-  if (isSessionTokenExpired) {
-    throw createHttpError(401, 'Session token expired');
+    return user;
+  } catch (error) {
+    if (error.name === 'CastError') {
+      throw createHttpError(400, 'Invalid user ID format');
+    }
+    throw error;
   }
-  return {
-    user,
-    accessToken: session.accessToken,
-  };
 };
 
-export const updateUser = async (userId, updateData) => {
-  const user = await User.findByIdAndUpdate(userId, updateData, {
-    new: true,
-    runValidators: true,
-  });
-  if (!user) {
-    throw createHttpError(404, 'User not found');
+export const updateUser = async (filter, updateData) => {
+  try {
+    const user = await User.findOneAndUpdate(filter, updateData, {
+      new: true,
+    }).select('-password');
+
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    return user;
+  } catch (error) {
+    if (error.name === 'CastError') {
+      throw createHttpError(400, 'Invalid user ID format');
+    }
+    throw error;
   }
-  return user;
 };
