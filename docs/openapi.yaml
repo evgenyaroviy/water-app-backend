@@ -14,7 +14,7 @@ tags:
   - name: Water
     description: Operations about Water.
 servers:
-  - url: https://nodejs-hw-mongodb-q121.onrender.com/api-docs
+  - url: https://water-app-backend.onrender.com/api-docs
   - url: http://localhost:3000
 paths:
   /auth/register:
