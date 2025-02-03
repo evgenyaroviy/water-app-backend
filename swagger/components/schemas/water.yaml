@@ -1,0 +1,31 @@
+type: object
+required:
+  - userId
+  - waterVolume
+  - time
+properties:
+  userId:
+    description: "User's id"
+    type: string
+    example: 65e4decdd286b30065d54af9
+  waterVolume:
+    description: "Volume of water consumed"
+    type: number
+    example: 2000
+  date:
+    description: "Date of water consumption"
+    type: string
+    format: date-time
+    example: 2021-08-09T00:00:00.000Z
+  time:
+    description: "Time of water consumption"
+    type: string
+    example: 12:00
+  totalAmount:
+    description: "Total amount of water consumed"
+    type: number
+    example: 2000
+  dailyNorm:
+    description: "Daily norm of water consumption"
+    type: number
+    example: 2000

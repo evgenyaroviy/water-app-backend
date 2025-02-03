@@ -17,48 +17,93 @@ servers:
   - url: https://nodejs-hw-mongodb-q121.onrender.com/api-docs
   - url: http://localhost:3000
 paths:
-  /auth/signup:
+  /auth/register:
     post:
       tags:
         - Auth
       summary: Register user
-      $ref: ../swagger/schemas/auth/signUp.yaml
-  /auth/signin:
+      $ref: ../swagger/paths/auth/signUp.yaml
+  /auth/login:
     post:
       tags:
         - Auth
       summary: Login user
-      $ref: ../swagger/schemas/auth/signIn.yaml
+      $ref: ../swagger/paths/auth/signIn.yaml
   /auth/logout:
     post:
       tags:
         - Auth
       summary: Logout user
-      $ref: ../swagger/schemas/auth/logout.yaml
+      $ref: ../swagger/paths/auth/logout.yaml
+  /auth/refresh:
+    post:
+      tags:
+        - Auth
+      summary: Refresh user token
+      $ref: ../swagger/paths/auth/refreshToken.yaml
+  /auth/request-reset-password:
+    post:
+      tags:
+        - Auth
+      summary: Request reset password
+      $ref: ../swagger/paths/auth/requestResetTokenController.yaml
   /auth/reset-password:
     post:
       tags:
         - Auth
       summary: Reset password
-      $ref: ../swagger/schemas/auth/resetPassword.yaml
-  /user/{id}:
+      $ref: ../swagger/paths/auth/resetPassword.yaml
+  /users/{userId}:
     get:
       tags:
         - User
       summary: Get current user info
-      $ref: ../swagger/paths/user/{id}/get.yaml
-    patch: 
-      tags:
-        - User
-      summary: Update user info
-      $ref: ../swagger/paths/user/{id}/patch.yaml
-  /user/{id}/avatar:
+      $ref: ../swagger/paths/user/{userId}/get.yaml
     patch:
       tags:
         - User
-      summary: Upload user avatar
-      $ref: ../swagger/paths/user/{id}/avatar/patch.yaml
-  
+      summary: Update user info
+      $ref: ../swagger/paths/user/{userId}/patch.yaml
+  /water:
+    get:
+      tags:
+        - Water
+      summary: Get all water
+      $ref: ../swagger/paths/water/get.yaml
+    post:
+      tags:
+        - Water
+      summary: Add water
+      $ref: ../swagger/paths/water/post.yaml
+  /water/{waterId}:
+    put:
+      tags:
+        - Water
+      summary: Update water
+      $ref: ../swagger/paths/water/{waterId}/put.yaml
+    delete:
+      tags:
+        - Water
+      summary: Delete water
+      $ref: ../swagger/paths/water/{waterId}/delete.yaml
+  /water/today:
+    get:
+      tags:
+        - Water
+      summary: Get today's water stats
+      $ref: ../swagger/paths/water/today/getTodayStats.yaml
+  /water/month/{date}:
+    get:
+      tags:
+        - Water
+      summary: Get monthly water stats
+      $ref: ../swagger/paths/water/month/{date}/getMonthlyStats.yaml
+  /water/daily-norm:
+    patch:
+      tags:
+        - Water
+      summary: Update daily water norm
+      $ref: ../swagger/paths/water/daily-norm/updateDailyNorm.yaml
 components:
   securitySchemes:
     bearerAuth:

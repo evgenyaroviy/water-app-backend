@@ -1,0 +1,46 @@
+tags:
+  - Water
+summary: Get mountly water stats
+operationId: getMonthlyStats
+description: Retrieve mountly water consumption stats for the authenticated user
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: date
+    required: true
+    schema:
+      type: string
+      format: date
+      example: 2023-12-01
+responses:
+  '200':
+    description: Successfully retrieved monthly water stats
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            date:
+              type: string
+              format: date
+              example: 2023-12-01
+            waterRecords:
+              type: array
+              items:
+                $ref: '../../../../components/schemas/water.yaml'
+            totalAmount:
+              type: number
+              example: 60000
+            dailyNorm:
+              type: number
+              example: 2500
+            percentage:
+              type: number
+              example: 89
+  '404':
+    $ref: '../../../../components/responses/404.yaml'
+  '401':
+    $ref: '../../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../../components/responses/500.yaml'

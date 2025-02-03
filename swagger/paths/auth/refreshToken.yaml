@@ -1,8 +1,10 @@
 tags:
   - Auth
-summary: Register a new user
-operationId: registerUserController
-description: 'Register a new user'
+summary: Refresh user session
+operationId: refreshUserSessionController
+description: 'Refresh user session'
+security:
+  - bearerAuth: []
 requestBody:
   required: true
   content:
@@ -10,15 +12,15 @@ requestBody:
       schema:
         type: object
         properties:
-          email:
+          sessionId:
             type: string
-            example: johndoe@example.com
-          password:
+            example: 65ca67e7ae7f10c88b598384
+          refreshToken:
             type: string
-            example: 'password'
+            example: dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4
 responses:
   '200':
-    description: Register successful
+    description: Tokens refreshed successfully
     content:
       application/json:
         schema:
@@ -29,19 +31,13 @@ responses:
               example: 200
             message:
               type: string
-              example: Register successful
+              example: Tokens refreshed successfully
             data:
               type: object
               properties:
                 refreshToken:
                   type: string
-                user:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    email:
-                      type: string
+                  example: dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':

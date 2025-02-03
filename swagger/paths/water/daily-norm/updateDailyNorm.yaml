@@ -1,0 +1,34 @@
+tags:
+  - Water
+summary: Update daily norm
+operationId: updateDailyNorm
+description: Update daily norm for the authenticated user
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          dailyNormMilliliters:
+            type: number
+            example: 2500
+responses:
+  '200':
+    description: Successfully update daily norm
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            dailyNormMilliliters:
+              type: number
+              example: 2500
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

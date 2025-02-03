@@ -1,0 +1,41 @@
+tags:
+  - Water
+summary: Update a water record
+operationId: updateWater
+description: Update a water record for the authenticated user
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: waterId
+    required: true
+    schema:
+      type: string
+      example: 65ca67e7ae7f10c88b598384
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          waterVolume:
+            type: number
+            example: 2000
+          date:
+            type: string
+            format: date-time
+            example: 2023-12-01T12:00:00.000Z
+responses:
+  '200':
+    description: Water record updated successfully
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/schemas/water.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

@@ -1,0 +1,22 @@
+tags:
+  - Auth
+summary: Logout user
+operationId: logoutUserController
+description: 'Logout user'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: sessionId
+    required: true
+    schema:
+      type: string
+responses:
+  '204':
+    description: Logout successful
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

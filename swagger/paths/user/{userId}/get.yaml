@@ -1,8 +1,8 @@
 tags:
   - User
-summary: Patch photo by user
-operationId: updateUserPhoto  
-description: 'Update user photo'
+summary: Get user profile
+operationId: getUserByIdController
+description: 'Get user profile'
 security:
   - bearerAuth: []
 parameters:
@@ -12,20 +12,9 @@ parameters:
     schema:
       type: string
       example: '65ca67e7ae7f10c88b598384'
-requestBody:
-  required: true
-  content:
-    multipart/form-data:
-      schema:
-        type: object
-        properties:
-          photo:
-            type: string
-            format: binary
-            description: 'Avatar image file'
 responses:
   '200':
-    description: 'Update user photo'
+    description: 'Get user profile'
     content:
       application/json:
         schema:
@@ -40,13 +29,13 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully update user photo!
+              example: Successfully found User!
             data:
               type: object
-              $ref: '../../../../components/schemas/user.yaml'
-  '401':
-    $ref: '../../../components/responses/401.yaml'
+              $ref: '../../../components/schemas/user.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
   '500':
     $ref: '../../../components/responses/500.yaml'

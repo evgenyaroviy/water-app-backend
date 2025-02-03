@@ -1,38 +1,31 @@
 tags:
-  - User
-summary: Get user profile
-operationId: getUserProfile
-description: 'Get user profile'
+  - Water
+summary: Delete a water record
+operationId: deleteWater
+description: Delete a water record for the authenticated user
 security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: id
+    name: waterId
     required: true
     schema:
       type: string
-      example: '65ca67e7ae7f10c88b598384'
+      example: 65ca67e7ae7f10c88b598384
 responses:
-  '200':
-    description: 'Get user profile'
+  '204':
+    description: Water record deleted successfully
     content:
       application/json:
         schema:
           type: object
-          required:
-            - status
-            - message
-            - data
           properties:
             status:
               type: integer
-              example: 200
+              example: 204
             message:
               type: string
-              example: Successfully found User!
-            data:
-              type: object
-              $ref: '../../../components/schemas/user.yaml'
+              example: Water record deleted successfully
   '404':
     $ref: '../../../components/responses/404.yaml'
   '401':

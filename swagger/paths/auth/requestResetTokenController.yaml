@@ -1,8 +1,8 @@
 tags:
   - Auth
-summary: Reset user password
-operationId: resetPasswordController
-description: 'Reset user password'
+summary: Request password reset token
+operationId: requestResetTokenController
+description: 'Request password reset token'
 security:
   - bearerAuth: []
 requestBody:
@@ -12,15 +12,12 @@ requestBody:
       schema:
         type: object
         properties:
-          token:
+          email:
             type: string
-            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpvaG4iOiIxMjM0IiwidmVyc2lvbnNl"
-          password:
-            type: string
-            example: 'password'
+            example: JonDou@example.com
 responses:
   '200':
-    description: Password reset successfully
+    description: Reset token sent successfully
     content:
       application/json:
         schema:
@@ -31,7 +28,7 @@ responses:
               example: 200
             message:
               type: string
-              example: Password reset successfully
+              example: Reset token sent successfully
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':
