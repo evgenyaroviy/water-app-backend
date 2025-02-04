@@ -20,11 +20,22 @@ export const registerUser = async (payload) => {
   });
   if (user) throw createHttpError(409, 'Email in use');
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  return await User.create({
-    ...payload,
-    password: encryptedPassword,
+  console.log('Registering new user:', {
+    email: payload.email,
+    password: payload.password,
   });
+
+  const newUser = await User.create({
+    ...payload,
+    password: payload.password,
+  });
+
+  console.log('Created user with hash:', {
+    email: newUser.email,
+    passwordHash: newUser.password.substring(0, 10) + '...',
+  });
+
+  return newUser;
 };
 
 export const loginUser = async (payload) => {
@@ -34,19 +45,63 @@ export const loginUser = async (payload) => {
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
-  const isEqual = await bcrypt.compare(payload.password, user.password);
+
+  console.log('Found user:', {
+    email: user.email,
+    passwordHash: user.password.substring(0, 10) + '...',
+  });
+
+  console.log('Attempting to compare passwords...');
+  const isEqual = await user.comparePassword(payload.password);
+  console.log('Password comparison details:', {
+    result: isEqual,
+    providedPasswordLength: payload.password.length,
+    storedHashLength: user.password.length,
+  });
+
   if (!isEqual) {
-    throw createHttpError(401, 'Unauthorized');
+    throw createHttpError(401, 'Неверный email или пароль');
   }
 
-  await Session.deleteOne({ owner: user._id });
+  try {
+    await Session.deleteOne({ userId: user._id });
+  } catch (error) {
+    console.error('Error deleting old session:', error);
+  }
 
   const newSession = createSession();
+  console.log('Created session object:', newSession);
 
-  return await Session.create({
-    owner: user._id,
-    ...newSession,
-  });
+  try {
+    const session = await Session.create({
+      userId: user._id,
+      accessToken: newSession.accessToken,
+      refreshToken: newSession.refreshToken,
+      accessTokenValidUntil: newSession.accessTokenValidUntil,
+      refreshTokenValidUntil: newSession.refreshTokenValidUntil,
+    });
+
+    console.log('Created new session:', {
+      sessionId: session._id,
+      userId: session.userId,
+      hasAccessToken: !!session.accessToken,
+      hasRefreshToken: !!session.refreshToken,
+      accessTokenValidUntil: session.accessTokenValidUntil,
+      refreshTokenValidUntil: session.refreshTokenValidUntil,
+    });
+
+    return session;
+  } catch (error) {
+    console.error('Error creating new session:', error);
+    console.error('Session data attempted to create:', {
+      userId: user._id,
+      accessToken: newSession.accessToken,
+      refreshToken: newSession.refreshToken,
+      accessTokenValidUntil: newSession.accessTokenValidUntil,
+      refreshTokenValidUntil: newSession.refreshTokenValidUntil,
+    });
+    throw createHttpError(500, 'Ошибка при создании сессии');
+  }
 };
 
 export const logoutUser = async (sessionId) => {
@@ -75,8 +130,11 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   await Session.deleteOne({ _id: sessionId, refreshToken });
 
   return await Session.create({
-    owner: session.owner,
-    ...newSession,
+    userId: session.userId,
+    accessToken: newSession.accessToken,
+    refreshToken: newSession.refreshToken,
+    accessTokenValidUntil: newSession.accessTokenValidUntil,
+    refreshTokenValidUntil: newSession.refreshTokenValidUntil,
   });
 };
 
