@@ -12,7 +12,7 @@ tags:
   - name: User
     description: User profile endpoints.
   - name: Water
-    description: Operations about Water.
+    description: Water endpoints.
 servers:
   - url: https://water-app-backend.onrender.com/api-docs
   - url: http://localhost:3000
