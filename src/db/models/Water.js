@@ -38,8 +38,12 @@ const waterSchema = new Schema(
   },
 );
 
-waterSchema.post('save', handleSaveError);
-waterSchema.pre('findOneAndUpdate', handleSaveError);
-waterSchema.post('findOneAndUpdate', handleSaveError);
+waterSchema.post('save', (error, doc, next) => {
+  handleSaveError(error, next);
+});
+
+waterSchema.post('findOneAndUpdate', (error, doc, next) => {
+  handleSaveError(error, next);
+});
 
 export const Water = model('water', waterSchema);

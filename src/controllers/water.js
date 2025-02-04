@@ -24,12 +24,17 @@ const getAllWater = async (req, res) => {
 const addWater = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { waterVolume, date } = req.body;
+    const { waterVolume, time, date } = req.body;
+
+    const [hours, minutes] = time.split(':');
+    const fullDate = new Date(date);
+    fullDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
 
     const water = new Water({
       userId,
       waterVolume,
-      date: date || new Date(),
+      time,
+      date: fullDate,
     });
 
     await water.save();
@@ -51,15 +56,39 @@ const addWater = async (req, res) => {
 const updateWater = async (req, res) => {
   try {
     const { waterId } = req.params;
-    const { waterVolume, date } = req.body;
+    const { waterVolume, time, date } = req.body;
 
-    const water = await Water.findOneAndUpdate(
+    if (!waterId || !waterVolume || !time || !date) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Missing required fields',
+        data: { waterId, waterVolume, time, date },
+      });
+    }
+
+    let fullDate;
+    try {
+      const [hours, minutes] = time.split(':');
+      fullDate = new Date(date);
+      if (isNaN(fullDate.getTime())) {
+        throw new Error('Invalid date format');
+      }
+      fullDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+    } catch (parseError) {
+      return res.status(400).json({
+        status: 400,
+        message: 'Invalid date or time format',
+        data: 'Date should be in YYYY-MM-DD format and time in HH:mm format',
+      });
+    }
+
+    const updatedWater = await Water.findOneAndUpdate(
       { _id: waterId, userId: req.user.id },
-      { waterVolume, date },
-      { new: true },
+      { $set: { waterVolume, time, date: fullDate } },
+      { new: true, runValidators: true },
     );
 
-    if (!water) {
+    if (!updatedWater) {
       return res.status(404).json({
         status: 404,
         message: 'Water record not found',
@@ -69,13 +98,17 @@ const updateWater = async (req, res) => {
     res.json({
       status: 200,
       message: 'Water record updated successfully',
-      data: water,
+      data: updatedWater,
     });
   } catch (error) {
+    console.error('Update water error:', error);
     res.status(500).json({
       status: 500,
       message: 'Something went wrong',
-      data: error.message,
+      data: {
+        error: error.message,
+        name: error.name,
+      },
     });
   }
 };
@@ -256,6 +289,38 @@ const updateDailyNorm = async (req, res) => {
   }
 };
 
+const getWaterById = async (req, res) => {
+  try {
+    const { waterId } = req.params;
+    const userId = req.user.id;
+
+    const water = await Water.findOne({ _id: waterId, userId });
+
+    if (!water) {
+      return res.status(404).json({
+        status: 404,
+        message: 'Water record not found',
+      });
+    }
+
+    res.json({
+      status: 200,
+      message: 'Water record retrieved successfully',
+      data: water,
+    });
+  } catch (error) {
+    console.error('Get water by id error:', error);
+    res.status(500).json({
+      status: 500,
+      message: 'Something went wrong',
+      data: {
+        error: error.message,
+        name: error.name,
+      },
+    });
+  }
+};
+
 export const waterController = {
   getAllWater: ctrlWrapper(getAllWater),
   addWater: ctrlWrapper(addWater),
@@ -264,4 +329,5 @@ export const waterController = {
   getTodayStats: ctrlWrapper(getTodayStats),
   getMonthlyStats: ctrlWrapper(getMonthlyStats),
   updateDailyNorm: ctrlWrapper(updateDailyNorm),
+  getWaterById: ctrlWrapper(getWaterById),
 };
