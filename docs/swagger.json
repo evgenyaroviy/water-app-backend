@@ -28,7 +28,7 @@
     },
     {
       "name": "Water",
-      "description": "Operations about Water."
+      "description": "Water endpoints."
     }
   ],
   "paths": {
