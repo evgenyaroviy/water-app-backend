@@ -1,11 +1,11 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Contact App
+  title: Drinkly App
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: Contact book
+  description: Your daily water consumption calendar
 tags:
   - name: Auth
     description: Authorization endpoints.
