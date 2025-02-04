@@ -40,20 +40,6 @@ export const updateUserController = async (req, res, next) => {
       }
     }
 
-    // Перевірка значення waterRate
-    if (updateData.waterRate !== undefined) {
-      const waterRate = Number(updateData.waterRate);
-      if (isNaN(waterRate) || waterRate < 1 || waterRate > 15000) {
-        return res.status(400).json({
-          status: 400,
-          message: 'Invalid waterRate value',
-          data: {
-            message: 'Water Rate should be between 1 and 15000 milliliters',
-          },
-        });
-      }
-    }
-
     const user = await updateUser(
       { _id: userId },
       {
