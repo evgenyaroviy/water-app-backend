@@ -39,7 +39,7 @@
         ],
         "summary": "Register user",
         "operationId": "registerUserController",
-        "description": "Register a new user",
+        "description": "Register a new user with the provided details",
         "requestBody": {
           "required": true,
           "content": {
@@ -49,11 +49,12 @@
                 "properties": {
                   "email": {
                     "type": "string",
+                    "format": "email",
                     "example": "johndoe@example.com"
                   },
                   "password": {
                     "type": "string",
-                    "example": "password"
+                    "example": "password123"
                   }
                 }
               }
@@ -61,8 +62,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Register successful",
+          "201": {
+            "description": "Successfully registered a user",
             "content": {
               "application/json": {
                 "schema": {
@@ -70,28 +71,22 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 201
                     },
                     "message": {
                       "type": "string",
-                      "example": "Register successful"
+                      "example": "Successfully registered a user!"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "refreshToken": {
-                          "type": "string"
+                        "id": {
+                          "type": "string",
+                          "example": "60d21b4667d0d8992e610c85"
                         },
-                        "user": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "email": {
-                              "type": "string"
-                            }
-                          }
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
                         }
                       }
                     }
@@ -119,12 +114,7 @@
         ],
         "summary": "Login user",
         "operationId": "loginUserController",
-        "description": "Login user",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Authenticate user and create a session",
         "requestBody": {
           "required": true,
           "content": {
@@ -134,11 +124,12 @@
                 "properties": {
                   "email": {
                     "type": "string",
+                    "format": "email",
                     "example": "johndoe@example.com"
                   },
                   "password": {
                     "type": "string",
-                    "example": "password"
+                    "example": "password123"
                   }
                 }
               }
@@ -147,16 +138,20 @@
         },
         "responses": {
           "200": {
-            "description": "Login successful",
+            "description": "Successfully authenticated user",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Cookies for refreshToken and sessionId",
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Expires=Wed, 21 Oct 2023 07:28:00 GMT"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -164,21 +159,21 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Login successful"
+                      "example": "Successfully authenticated user"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "refreshToken": {
+                        "accessToken": {
                           "type": "string",
-                          "example": "dGhpcyBpcyBhIHJlZnJlc2ggdG9rZW4"
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                         },
                         "user": {
                           "type": "object",
                           "properties": {
                             "id": {
                               "type": "string",
-                              "example": "65ca67e7ae7f10c88b598384"
+                              "example": "60d21b4667d0d8992e610c85"
                             },
                             "email": {
                               "type": "string",
@@ -230,7 +225,24 @@
         ],
         "responses": {
           "204": {
-            "description": "Logout successful"
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 204
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -527,15 +539,16 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "userId",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "65ca67e7ae7f10c88b598384"
+              "example": "60d21b4667d0d8992e610c85"
             }
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -572,7 +585,7 @@
         },
         "responses": {
           "200": {
-            "description": "Update user by id",
+            "description": "Successfully update user by id",
             "content": {
               "application/json": {
                 "schema": {

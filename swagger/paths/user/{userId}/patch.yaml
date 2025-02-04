@@ -7,12 +7,13 @@ security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: id
+    name: userId
     required: true
     schema:
       type: string
-      example: '65ca67e7ae7f10c88b598384'
+      example: '60d21b4667d0d8992e610c85'
 requestBody:
+  required: true
   content:
     multipart/form-data:
       schema:
@@ -39,7 +40,7 @@ requestBody:
             description: 'Avatar image file'
 responses:
   '200':
-    description: 'Update user by id'
+    description: 'Successfully update user by id'
     content:
       application/json:
         schema:

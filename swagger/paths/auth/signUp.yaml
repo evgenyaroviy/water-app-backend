@@ -2,7 +2,7 @@ tags:
   - Auth
 summary: Register a new user
 operationId: registerUserController
-description: 'Register a new user'
+description: Register a new user with the provided details
 requestBody:
   required: true
   content:
@@ -12,13 +12,14 @@ requestBody:
         properties:
           email:
             type: string
+            format: email
             example: johndoe@example.com
           password:
             type: string
-            example: 'password'
+            example: password123
 responses:
-  '200':
-    description: Register successful
+  '201':
+    description: Successfully registered a user
     content:
       application/json:
         schema:
@@ -26,22 +27,19 @@ responses:
           properties:
             status:
               type: integer
-              example: 200
+              example: 201
             message:
               type: string
-              example: Register successful
+              example: Successfully registered a user!
             data:
               type: object
               properties:
-                refreshToken:
+                id:
                   type: string
-                user:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    email:
-                      type: string
+                  example: 60d21b4667d0d8992e610c85
+                email:
+                  type: string
+                  example: johndoe@example.com
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':
