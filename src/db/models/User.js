@@ -2,6 +2,7 @@ import { model, Schema } from 'mongoose';
 import { emailRegExp } from '../../constants/users.js';
 import { handleSaveError } from './hooks.js';
 import bcrypt from 'bcrypt';
+import { WATER_CONSTANTS } from '../../constants/water.js';
 
 export const genderList = ['woman', 'man'];
 
@@ -17,8 +18,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Пароль обязателен'],
-      minlength: [6, 'Минимальная длина пароля 6 символов'],
+      required: [true, 'Password is required'],
+      minlength: [6, 'Minimum password length is 6 characters'],
     },
     newPassword: {
       type: String,
@@ -33,9 +34,9 @@ const userSchema = new Schema(
     },
     waterRate: {
       type: Number,
-      min: 1,
-      max: 15000,
-      default: 2000,
+      min: WATER_CONSTANTS.MIN_DAILY_NORM,
+      max: WATER_CONSTANTS.MAX_DAILY_NORM,
+      default: WATER_CONSTANTS.DEFAULT_DAILY_NORM,
     },
   },
   {
@@ -48,7 +49,7 @@ userSchema.post('save', handleSaveError);
 
 userSchema.methods.updatePassword = function (newPassword) {
   this.password = newPassword;
-  this.newPassword = undefined; // Очищення поля newPassword після оновлення
+  this.newPassword = undefined;
 };
 
 userSchema.methods.comparePassword = async function (candidatePassword) {
@@ -65,12 +66,40 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   }
 };
 
-// Хеширование пароля перед сохранением
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
+});
+
+userSchema.pre('findOneAndUpdate', function (next) {
+  const update = this.getUpdate();
+
+  if (update.waterRate || (update.$set && update.$set.waterRate)) {
+    const waterRate = update.waterRate || update.$set.waterRate;
+
+    if (
+      waterRate < WATER_CONSTANTS.MIN_DAILY_NORM ||
+      waterRate > WATER_CONSTANTS.MAX_DAILY_NORM
+    ) {
+      const error = new Error(
+        `Water rate must be between ${WATER_CONSTANTS.MIN_DAILY_NORM} and ${WATER_CONSTANTS.MAX_DAILY_NORM} milliliters`,
+      );
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  next();
+});
+
+userSchema.post('findOneAndUpdate', (error, res, next) => {
+  if (error.status === 400) {
+    next(error);
+  } else {
+    handleSaveError(error, next);
+  }
 });
 
 export const User = model('user', userSchema);

@@ -8,13 +8,6 @@ const waterRouter = express.Router();
 
 waterRouter.use(authenticate);
 
-waterRouter.get('/:waterId', waterController.getWaterById);
-
-waterRouter.get('/', waterController.getAllWater);
-waterRouter.post('/', waterController.addWater);
-waterRouter.put('/:waterId', waterController.updateWater);
-waterRouter.delete('/:waterId', waterController.deleteWater);
-
 waterRouter.get('/today', waterController.getTodayStats);
 waterRouter.get(
   '/month/:date',
@@ -26,5 +19,12 @@ waterRouter.patch(
   validateBody(schemas.updateDailyNormSchema),
   waterController.updateDailyNorm,
 );
+
+
+waterRouter.get('/:waterId', waterController.getWaterById);
+waterRouter.get('/', waterController.getAllWater);
+waterRouter.post('/', waterController.addWater);
+waterRouter.put('/:waterId', waterController.updateWater);
+waterRouter.delete('/:waterId', waterController.deleteWater);
 
 export default waterRouter;

@@ -7,7 +7,7 @@ import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
 
-router.use(authenticate); // Защищаем все маршруты
+router.use(authenticate); 
 
 router.get('/:userId', getUserByIdController);
 router.put('/:userId', updateUserController);

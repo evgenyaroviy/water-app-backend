@@ -1,6 +1,7 @@
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { User } from '../db/models/User.js';
 import { Water } from '../db/models/Water.js';
+import { WATER_CONSTANTS, WATER_MESSAGES } from '../constants/water.js';
 
 const getAllWater = async (req, res) => {
   try {
@@ -74,7 +75,7 @@ const updateWater = async (req, res) => {
         throw new Error('Invalid date format');
       }
       fullDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
-    } catch (parseError) {
+    } catch  {
       return res.status(400).json({
         status: 400,
         message: 'Invalid date or time format',
@@ -237,40 +238,40 @@ const getMonthlyStats = async (req, res) => {
 const updateDailyNorm = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { dailyNormMilliliters } = req.body;
+    const { waterRate } = req.body;
 
     if (
-      !dailyNormMilliliters ||
-      dailyNormMilliliters < 1 ||
-      dailyNormMilliliters > 15000
+      !waterRate ||
+      waterRate < WATER_CONSTANTS.MIN_DAILY_NORM ||
+      waterRate > WATER_CONSTANTS.MAX_DAILY_NORM
     ) {
       return res.status(400).json({
         status: 400,
         message: 'Invalid daily norm value',
         data: {
-          message: 'Daily norm should be between 1 and 15000 milliliters',
+          message: WATER_MESSAGES.INVALID_DAILY_NORM,
         },
       });
     }
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { waterRate: dailyNormMilliliters },
-      { new: true },
+      { waterRate },
+      { new: true, runValidators: true },
     ).select('-password');
 
     if (!updatedUser) {
       return res.status(404).json({
         status: 404,
-        message: 'User not found',
+        message: WATER_MESSAGES.USER_NOT_FOUND,
       });
     }
 
     return res.json({
       status: 200,
-      message: 'Daily norm updated successfully',
+      message: WATER_MESSAGES.UPDATE_SUCCESS,
       data: {
-        dailyNormMilliliters: updatedUser.waterRate,
+        waterRate: updatedUser.waterRate,
         user: {
           id: updatedUser._id,
           email: updatedUser.email,
@@ -279,12 +280,10 @@ const updateDailyNorm = async (req, res) => {
     });
   } catch (error) {
     console.error('Update daily norm error:', error);
-    return res.status(500).json({
-      status: 500,
-      message: 'Something went wrong',
-      data: {
-        message: error.message,
-      },
+    return res.status(error.status || 500).json({
+      status: error.status || 500,
+      message: error.status === 400 ? error.message : 'Something went wrong',
+      data: error.message,
     });
   }
 };
