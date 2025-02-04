@@ -22,35 +22,63 @@ const getAllWater = async (req, res) => {
   }
 };
 
-const addWater = async (req, res) => {
+const addWater = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const { waterVolume, time, date } = req.body;
+    const { amount, date } = req.body;
 
-    const [hours, minutes] = time.split(':');
-    const fullDate = new Date(date);
-    fullDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-    const water = new Water({
+    console.log('Adding water record:', {
       userId,
-      waterVolume,
-      time,
-      date: fullDate,
+      amount,
+      date,
+      user: req.user,
     });
 
-    await water.save();
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized',
+      });
+    }
+
+    if (!amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'Amount is required',
+      });
+    }
+
+    const waterDate = date ? new Date(date) : new Date();
+    const time = waterDate.toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    console.log('Creating water record with:', {
+      userId,
+      waterVolume: Number(amount),
+      date: waterDate,
+      time,
+    });
+
+    const waterRecord = await Water.create({
+      userId,
+      waterVolume: Number(amount),
+      date: waterDate,
+      time,
+    });
+
+    console.log('Water record created:', waterRecord);
 
     res.status(201).json({
-      status: 201,
-      message: 'Water record added successfully',
-      data: water,
+      success: true,
+      data: waterRecord,
     });
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      message: 'Something went wrong',
-      data: error.message,
-    });
+    console.error('Error in addWater:', error);
+    next(error);
   }
 };
 
@@ -58,6 +86,7 @@ const updateWater = async (req, res) => {
   try {
     const { waterId } = req.params;
     const { waterVolume, time, date } = req.body;
+    const userId = req.user.id;
 
     if (!waterId || !waterVolume || !time || !date) {
       return res.status(400).json({
@@ -75,7 +104,7 @@ const updateWater = async (req, res) => {
         throw new Error('Invalid date format');
       }
       fullDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
-    } catch  {
+    } catch {
       return res.status(400).json({
         status: 400,
         message: 'Invalid date or time format',
@@ -84,7 +113,7 @@ const updateWater = async (req, res) => {
     }
 
     const updatedWater = await Water.findOneAndUpdate(
-      { _id: waterId, userId: req.user.id },
+      { _id: waterId, userId },
       { $set: { waterVolume, time, date: fullDate } },
       { new: true, runValidators: true },
     );

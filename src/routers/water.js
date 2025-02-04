@@ -20,7 +20,6 @@ waterRouter.patch(
   waterController.updateDailyNorm,
 );
 
-
 waterRouter.get('/:waterId', waterController.getWaterById);
 waterRouter.get('/', waterController.getAllWater);
 waterRouter.post('/', waterController.addWater);
