@@ -7,21 +7,23 @@ const waterEntryValidation = {
     .max(WATER_CONSTANTS.MAX_WATER_AMOUNT)
     .required()
     .messages({
-      'number.base': 'Количество воды должно быть числом',
-      'number.min': 'Минимальное количество воды 1 мл',
-      'number.max': 'Максимальное количество воды 5000 мл',
-      'any.required': 'Количество воды обязательно',
+      'number.base': 'Water amount must be a number',
+      'number.min': 'Minimum water amount is 1 ml',
+      'number.max': 'Maximum water amount is 5000 ml',
+      'any.required': 'Water amount is required',
     }),
+
   time: Joi.string()
     .pattern(new RegExp(`^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$`))
     .required()
     .messages({
-      'string.pattern.base': 'Время должно быть в формате HH:mm',
-      'any.required': 'Время обязательно',
+      'string.pattern.base': 'Time must be in the format HH:mm',
+      'any.required': 'Time is required',
     }),
+
   date: Joi.date().iso().required().messages({
-    'date.base': 'Дата должна быть валидной',
-    'any.required': 'Дата обязательна',
+    'date.base': 'Date must be a valid date',
+    'any.required': 'Date is required',
   }),
 };
 
@@ -31,12 +33,16 @@ const entriesWaterSchemas = baseWaterSchema.clone();
 const updateWaterSchemas = baseWaterSchema.clone();
 
 const updateDailyNormSchema = Joi.object({
-  dailyNormMilliliters: Joi.number().min(1).max(15000).required().messages({
-    'number.base': 'Дневная норма должна быть числом',
-    'number.min': 'Дневная норма должна быть больше 0',
-    'number.max': 'Дневная норма не может превышать 15000 мл',
-    'any.required': 'Дневная норма обязательна',
-  }),
+  waterRate: Joi.number()
+    .min(WATER_CONSTANTS.MIN_DAILY_NORM)
+    .max(WATER_CONSTANTS.MAX_DAILY_NORM)
+    .required()
+    .messages({
+      'number.base': 'Daily norm must be a number',
+      'number.min': `Daily norm must be at least ${WATER_CONSTANTS.MIN_DAILY_NORM} ml`,
+      'number.max': `Daily norm cannot exceed ${WATER_CONSTANTS.MAX_DAILY_NORM} ml`,
+      'any.required': 'Daily norm is required',
+    }),
 });
 
 export const schemas = {
