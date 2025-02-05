@@ -734,7 +734,7 @@
           "Water"
         ],
         "summary": "Get water by Id",
-        "operationId": "getAllWater",
+        "operationId": "getWaterById",
         "description": "Retrieve all water records for the authenticated user",
         "security": [
           {

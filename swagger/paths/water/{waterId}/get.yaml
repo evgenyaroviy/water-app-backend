@@ -1,7 +1,7 @@
 tags:
   - Water
 summary: Get all water records
-operationId: getAllWater
+operationId: getWaterById
 description: Retrieve all water records for the authenticated user
 security:
   - bearerAuth: []
