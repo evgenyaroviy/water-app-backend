@@ -14,7 +14,7 @@ tags:
   - name: Water
     description: Water endpoints.
 servers:
-  - url: https://water-app-backend.onrender.com/api-docs
+  - url: https://water-app-backend.onrender.com/
   - url: http://localhost:3000
 paths:
   /auth/register:
