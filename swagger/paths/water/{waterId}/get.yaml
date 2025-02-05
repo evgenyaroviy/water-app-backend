@@ -1,38 +1,36 @@
 tags:
-  - User
-summary: Get user profile
-operationId: getUserByIdController
-description: 'Get user profile'
+  - Water
+summary: Get all water records
+operationId: getAllWater
+description: Retrieve all water records for the authenticated user
 security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: userId
+    name: id
     required: true
     schema:
       type: string
       example: '65ca67e7ae7f10c88b598384'
 responses:
   '200':
-    description: 'Get user profile'
+    description: Successfully retrieved water records
     content:
       application/json:
         schema:
           type: object
-          required:
-            - status
-            - message
-            - data
           properties:
             status:
               type: integer
               example: 200
             message:
               type: string
-              example: Successfully found User!
+              example: Successfully retrieved water records
             data:
-              type: object
-              $ref: '../../../components/schemas/user.yaml'
+              type: array
+              items:
+                type: object
+                $ref: '../../../components/schemas/water.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
   '401':

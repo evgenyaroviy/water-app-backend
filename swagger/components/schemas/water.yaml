@@ -4,6 +4,10 @@ required:
   - waterVolume
   - time
 properties:
+  _id:
+    description: "Water's id"
+    type: string
+    example: 65ca67e7ae7f10c88b598384
   userId:
     description: "User's id"
     type: string
