@@ -76,6 +76,11 @@ paths:
       summary: Add water
       $ref: ../swagger/paths/water/post.yaml
   /water/{waterId}:
+    get:
+      tags:
+        - Water
+      summary: Get water by Id
+      $ref: ../swagger/paths/water/{waterId}/get.yaml
     put:
       tags:
         - Water
