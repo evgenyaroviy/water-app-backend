@@ -392,11 +392,6 @@
         "summary": "Reset password",
         "operationId": "resetPasswordController",
         "description": "Reset user password",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
