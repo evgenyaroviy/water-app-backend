@@ -27,13 +27,6 @@ const addWater = async (req, res, next) => {
     const userId = req.user.id;
     const { amount, date } = req.body;
 
-    console.log('Adding water record:', {
-      userId,
-      amount,
-      date,
-      user: req.user,
-    });
-
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -56,29 +49,32 @@ const addWater = async (req, res, next) => {
       second: '2-digit',
     });
 
-    console.log('Creating water record with:', {
-      userId,
-      waterVolume: Number(amount),
-      date: waterDate,
-      time,
-    });
+    try {
+      const waterRecord = await Water.create({
+        userId,
+        waterVolume: Number(amount),
+        date: waterDate,
+        time,
+      });
 
-    const waterRecord = await Water.create({
-      userId,
-      waterVolume: Number(amount),
-      date: waterDate,
-      time,
-    });
-
-    console.log('Water record created:', waterRecord);
-
-    res.status(201).json({
-      success: true,
-      data: waterRecord,
-    });
+      return res.status(201).json({
+        success: true,
+        data: waterRecord,
+      });
+    } catch (createError) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid water record data',
+        error: createError.message,
+      });
+    }
   } catch (error) {
     console.error('Error in addWater:', error);
-    next(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message,
+    });
   }
 };
 
