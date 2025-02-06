@@ -2,7 +2,6 @@ import express from 'express';
 import pinoHttp from 'pino-http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { getEnvVar } from './utils/getEnvVar.js';
 import helmet from 'helmet';
 
 import authRouter from './routers/auth.js';
@@ -12,6 +11,8 @@ import waterRouter from './routers/water.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
+
+import { getEnvVar } from './utils/getEnvVar.js';
 
 const PORT = Number(getEnvVar('PORT', 3000));
 
@@ -73,10 +74,10 @@ export const setupServer = () => {
     next();
   });
 
+  app.use('/auth', authRouter);
   app.use('/users', userRouter);
   app.use('/water', waterRouter);
   app.use('/api-docs', swaggerDocs());
-  app.use('/auth', authRouter);
 
   app.use('*', notFoundHandler);
 

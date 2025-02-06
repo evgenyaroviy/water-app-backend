@@ -1,6 +1,8 @@
 import { User } from '../db/models/User.js';
 import { Session } from '../db/models/Session.js';
+
 import { getUserById, updateUser } from '../services/userServices.js';
+
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -11,7 +13,7 @@ import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const getUserByIdController = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
     const user = await getUserById(userId);
 
     res.json({
@@ -26,7 +28,7 @@ export const getUserByIdController = async (req, res, next) => {
 
 export const updateUserController = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
     const updateData = req.body;
     const photo = req.file;
 
