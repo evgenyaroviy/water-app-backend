@@ -7,7 +7,7 @@ security:
   - bearerAuth: []
 parameters:
   - in: path
-    name: id
+    name: _id
     required: true
     schema:
       type: string

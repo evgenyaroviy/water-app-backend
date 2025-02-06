@@ -5,13 +5,13 @@ operationId: getUserByIdController
 description: 'Get user profile'
 security:
   - bearerAuth: []
-parameters:
-  - in: path
-    name: userId
-    required: true
-    schema:
-      type: string
-      example: '65ca67e7ae7f10c88b598384'
+# parameters:
+#   - in: path
+#     name: userId
+#     required: true
+#     schema:
+#       type: string
+#       example: '65ca67e7ae7f10c88b598384'
 responses:
   '200':
     description: 'Get user profile'
@@ -32,10 +32,10 @@ responses:
               example: Successfully found User!
             data:
               type: object
-              $ref: '../../../components/schemas/user.yaml'
+              $ref: '../../components/schemas/user.yaml'
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: '../../components/responses/404.yaml'
   '401':
-    $ref: '../../../components/responses/401.yaml'
+    $ref: '../../components/responses/401.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../components/responses/500.yaml'

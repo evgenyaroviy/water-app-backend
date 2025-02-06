@@ -5,13 +5,13 @@ operationId: updateUserController
 description: 'Update user profile'
 security:
   - bearerAuth: []
-parameters:
-  - in: path
-    name: userId
-    required: true
-    schema:
-      type: string
-      example: '60d21b4667d0d8992e610c85'
+# parameters:
+#   - in: path
+#     name: userId
+#     required: true
+#     schema:
+#       type: string
+#       example: '60d21b4667d0d8992e610c85'
 requestBody:
   required: true
   content:
@@ -58,10 +58,10 @@ responses:
               example: Successfully update contact with id 65ca67e7ae7f10c88b598384!
             data:
               type: object
-              $ref: '../../../components/schemas/user.yaml'
+              $ref: '../../components/schemas/user.yaml'
   '401':
-    $ref: '../../../components/responses/401.yaml'
+    $ref: '../../components/responses/401.yaml'
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: '../../components/responses/404.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../components/responses/500.yaml'

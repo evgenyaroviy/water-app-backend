@@ -53,17 +53,17 @@ paths:
         - Auth
       summary: Reset password
       $ref: ../swagger/paths/auth/resetPassword.yaml
-  /users/{userId}:
+  /users:
     get:
       tags:
         - User
       summary: Get current user info
-      $ref: ../swagger/paths/user/{userId}/get.yaml
+      $ref: ../swagger/paths/users/get.yaml
     patch:
       tags:
         - User
       summary: Update user info
-      $ref: ../swagger/paths/user/{userId}/patch.yaml
+      $ref: ../swagger/paths/users/patch.yaml
   /water:
     get:
       tags:
