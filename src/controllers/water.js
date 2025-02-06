@@ -157,7 +157,6 @@ const deleteWater = async (req, res) => {
     res.json({
       status: 200,
       message: 'Water record deleted successfully',
-      data: water,
     });
   } catch (error) {
     res.status(500).json({
