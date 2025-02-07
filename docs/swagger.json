@@ -541,6 +541,10 @@
                     "type": "string",
                     "format": "binary",
                     "description": "Avatar image file"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "example": "Man"
                   }
                 }
               }
@@ -571,6 +575,10 @@
                     "data": {
                       "type": "object",
                       "$ref": "#/components/schemas/user"
+                    },
+                    "gender": {
+                      "type": "string",
+                      "example": "Man"
                     }
                   }
                 }
