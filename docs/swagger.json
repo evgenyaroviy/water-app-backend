@@ -209,36 +209,9 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "sessionId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "204": {
-            "description": "Logout successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 204
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Logout successful"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Logout successful"
           },
           "401": {
             "$ref": "#/components/responses/401"
