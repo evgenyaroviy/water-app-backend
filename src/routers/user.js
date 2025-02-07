@@ -5,6 +5,8 @@ import {
   updateUserController,
 } from '../controllers/userControllers.js';
 
+import { upload } from '../middlewares/upload.js';
+
 import { authenticate } from '../middlewares/authenticate.js';
 
 const userRouter = express.Router();
@@ -12,6 +14,6 @@ const userRouter = express.Router();
 userRouter.use(authenticate);
 
 userRouter.get('/', getUserByIdController);
-userRouter.patch('/', updateUserController);
+userRouter.patch('/', upload.single('photo'), updateUserController);
 
 export default userRouter;
