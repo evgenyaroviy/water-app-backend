@@ -38,6 +38,9 @@ requestBody:
             type: string
             format: binary
             description: 'Avatar image file'
+          gender:
+            type: string
+            example: Man
 responses:
   '200':
     description: 'Successfully update user by id'
@@ -59,6 +62,9 @@ responses:
             data:
               type: object
               $ref: '../../components/schemas/user.yaml'
+            gender:
+              type: string
+              example: Man
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':

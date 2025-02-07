@@ -62,7 +62,7 @@ export const updateUserController = async (req, res, next) => {
     }
 
     const user = await updateUser(
-      { _id: userId },
+      { userId: userId },
       updateData
     );
 
