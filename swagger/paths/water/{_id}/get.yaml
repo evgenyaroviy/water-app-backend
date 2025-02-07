@@ -27,10 +27,8 @@ responses:
               type: string
               example: Successfully retrieved water records
             data:
-              type: array
-              items:
-                type: object
-                $ref: '../../../components/schemas/water.yaml'
+              type: object
+              $ref: '../../../components/schemas/water.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
   '401':

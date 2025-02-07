@@ -142,6 +142,8 @@ const updateWater = async (req, res) => {
 const deleteWater = async (req, res) => {
   try {
     const { waterId } = req.params;
+    console.log(waterId);
+    
     const water = await Water.findOneAndDelete({
       _id: waterId,
       userId: req.user.id,
