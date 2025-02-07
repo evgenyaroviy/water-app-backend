@@ -30,7 +30,7 @@ export const getUserByIdController = async (req, res, next) => {
 export const updateUserController = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const { password, newPassword, name, ...updateData } = req.body;
+    const { oldPassword, newPassword, name, ...updateData } = req.body;
     const photo = req.file;
 
     let photoUrl;
@@ -44,27 +44,23 @@ export const updateUserController = async (req, res, next) => {
       updateData.photo = photoUrl;
     }
 
-    if (password && newPassword) {
+    if (oldPassword && newPassword) {
       const user = await User.findById(userId);
-      if (!user || !(await user.comparePassword(password))) {
+      if (!user || !(await user.comparePassword(oldPassword))) {
         return res.status(401).json({
           status: 401,
           message: 'Invalid current password',
         });
       }
 
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      updateData.password = hashedPassword;
+      updateData.password = await bcrypt.hash(newPassword, 10);
     }
 
     if (name) {
       updateData.name = name;
     }
 
-    const user = await updateUser(
-      { _id: userId },
-      updateData
-    );
+    const user = await updateUser({ _id: userId }, updateData);
 
     res.json({
       status: 200,
