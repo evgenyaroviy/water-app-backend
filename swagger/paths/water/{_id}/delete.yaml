@@ -15,17 +15,6 @@ parameters:
 responses:
   '204':
     description: Water record deleted successfully
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            status:
-              type: integer
-              example: 204
-            message:
-              type: string
-              example: Water record deleted successfully
   '404':
     $ref: '../../../components/responses/404.yaml'
   '401':
