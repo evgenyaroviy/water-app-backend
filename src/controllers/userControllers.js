@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { User } from '../db/models/User.js';
 import { Session } from '../db/models/Session.js';
 
@@ -29,7 +30,7 @@ export const getUserByIdController = async (req, res, next) => {
 export const updateUserController = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const updateData = req.body;
+    const { password, newPassword, name, ...updateData } = req.body;
     const photo = req.file;
 
     let photoUrl;
@@ -40,14 +41,29 @@ export const updateUserController = async (req, res, next) => {
       } else {
         photoUrl = saveFileToUploadsDir(photo);
       }
+      updateData.photo = photoUrl;
+    }
+
+    if (password && newPassword) {
+      const user = await User.findById(userId);
+      if (!user || !(await user.comparePassword(password))) {
+        return res.status(401).json({
+          status: 401,
+          message: 'Invalid current password',
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      updateData.password = hashedPassword;
+    }
+
+    if (name) {
+      updateData.name = name;
     }
 
     const user = await updateUser(
       { _id: userId },
-      {
-        ...updateData,
-        photo: photoUrl,
-      },
+      updateData
     );
 
     res.json({
@@ -56,6 +72,7 @@ export const updateUserController = async (req, res, next) => {
       data: user,
     });
   } catch (error) {
+    console.error('Update user error:', error);
     next(error);
   }
 };
