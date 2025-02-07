@@ -1,8 +1,8 @@
 tags:
   - Water
-summary: Get mountly water stats
+summary: Get monthly water stats
 operationId: getMonthlyStats
-description: Retrieve mountly water consumption stats for the authenticated user
+description: Retrieve monthly water consumption stats for the authenticated user
 security:
   - bearerAuth: []
 parameters:
@@ -21,23 +21,65 @@ responses:
         schema:
           type: object
           properties:
-            date:
+            status:
+              type: integer
+              example: 200
+            message:
               type: string
-              format: date
-              example: 2025-02-06T15:17:00.000Z
-            waterRecords:
+              example: Monthly stats retrieved successfully
+            data:
               type: array
               items:
-                $ref: '../../../../components/schemas/water.yaml'
-            totalAmount:
-              type: number
-              example: 7766
-            dailyNorm:
-              type: number
-              example: 2500
-            percentage:
-              type: number
-              example: 89
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+                    example: 2025-02-07T12:00:00.000Z
+                  waterRecords:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: 67a624a2d90f184f2be933d5
+                        userId:
+                          type: string
+                          example: 67a61de6d4bb680f7fe845ab
+                        waterVolume:
+                          type: number
+                          example: 4455
+                        date:
+                          type: string
+                          format: date-time
+                          example: 2025-02-07T12:00:00.000Z
+                        time:
+                          type: string
+                          example: 12:00:00
+                        totalAmount:
+                          type: number
+                          example: 0
+                        dailyNorm:
+                          type: number
+                          example: 2000
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: 2025-02-07T15:20:02.078Z
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2025-02-07T15:20:02.078Z
+                  totalAmount:
+                    type: number
+                    example: 11143
+                  dailyNorm:
+                    type: number
+                    example: 4333
+                  percentage:
+                    type: number
+                    example: 257
   '404':
     $ref: '../../../../components/responses/404.yaml'
   '401':
