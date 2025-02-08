@@ -56,7 +56,11 @@
                     "type": "string",
                     "example": "password123"
                   }
-                }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -131,7 +135,11 @@
                     "type": "string",
                     "example": "password123"
                   }
-                }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -500,7 +508,7 @@
                     "format": "email",
                     "example": "johndoe@example.com"
                   },
-                  "password": {
+                  "oldPassword": {
                     "description": "User's password",
                     "type": "string",
                     "example": "password"

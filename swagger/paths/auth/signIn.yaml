@@ -17,6 +17,9 @@ requestBody:
           password:
             type: string
             example: password123
+        required:
+          - email
+          - password
 responses:
   '200':
     description: Successfully authenticated user
