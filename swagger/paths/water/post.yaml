@@ -12,9 +12,9 @@ requestBody:
       schema:
         type: object
         properties:
-          userId:
-            type: string
-            example: 5f4a5f6b7e5c7d8f9a6b7c8d
+          # userId:
+          #   type: string
+          #   example: 5f4a5f6b7e5c7d8f9a6b7c8d
           amount:
             type: number
             example: 2000

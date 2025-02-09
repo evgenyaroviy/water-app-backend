@@ -26,7 +26,7 @@ requestBody:
             type: string
             format: email
             example: johndoe@example.com
-          password:
+          oldPassword:
             description: "User's password"
             type: string
             example: 'password'
@@ -61,10 +61,25 @@ responses:
               example: Successfully update contact with id 65ca67e7ae7f10c88b598384!
             data:
               type: object
-              $ref: '../../components/schemas/user.yaml'
-            gender:
-              type: string
-              example: Man
+              properties:
+                _id:
+                  type: string
+                  example: 67a5ac86f835a774cc0e9645
+                name:
+                  type: string
+                  example: Jhon Dou
+                email:
+                  type: string
+                  example: johndoe@example.com
+                gender:
+                  type: string
+                  example: Man
+                waterRate:
+                  type: number
+                  example: 2500
+                photo:
+                  type: string
+                  example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':

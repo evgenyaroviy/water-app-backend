@@ -75,22 +75,22 @@ paths:
         - Water
       summary: Add water
       $ref: ../swagger/paths/water/post.yaml
-  /water/{waterId}:
+  /water/{_id}:
     get:
       tags:
         - Water
       summary: Get water by Id
-      $ref: ../swagger/paths/water/{waterId}/get.yaml
+      $ref: ../swagger/paths/water/{_id}/get.yaml
     put:
       tags:
         - Water
       summary: Update water
-      $ref: ../swagger/paths/water/{waterId}/put.yaml
+      $ref: ../swagger/paths/water/{_id}/put.yaml
     delete:
       tags:
         - Water
       summary: Delete water
-      $ref: ../swagger/paths/water/{waterId}/delete.yaml
+      $ref: ../swagger/paths/water/{_id}/delete.yaml
   /water/today:
     get:
       tags:

@@ -1,8 +1,8 @@
 tags:
   - Water
-summary: Delete a water record
-operationId: deleteWater
-description: Delete a water record for the authenticated user
+summary: Get all water records
+operationId: getWaterById
+description: Retrieve all water records for the authenticated user
 security:
   - bearerAuth: []
 parameters:
@@ -11,10 +11,10 @@ parameters:
     required: true
     schema:
       type: string
-      example: 65ca67e7ae7f10c88b598384
+      example: '65ca67e7ae7f10c88b598384'
 responses:
-  '204':
-    description: Water record deleted successfully
+  '200':
+    description: Successfully retrieved water records
     content:
       application/json:
         schema:
@@ -22,10 +22,13 @@ responses:
           properties:
             status:
               type: integer
-              example: 204
+              example: 200
             message:
               type: string
-              example: Water record deleted successfully
+              example: Successfully retrieved water records
+            data:
+              type: object
+              $ref: '../../../components/schemas/water.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
   '401':

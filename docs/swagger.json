@@ -56,7 +56,11 @@
                     "type": "string",
                     "example": "password123"
                   }
-                }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -131,7 +135,11 @@
                     "type": "string",
                     "example": "password123"
                   }
-                }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -209,36 +217,9 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "sessionId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "204": {
-            "description": "Logout successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 204
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Logout successful"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Logout successful"
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -527,7 +508,7 @@
                     "format": "email",
                     "example": "johndoe@example.com"
                   },
-                  "password": {
+                  "oldPassword": {
                     "description": "User's password",
                     "type": "string",
                     "example": "password"
@@ -574,11 +555,32 @@
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/user"
-                    },
-                    "gender": {
-                      "type": "string",
-                      "example": "Man"
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "example": "67a5ac86f835a774cc0e9645"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Jhon Dou"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "gender": {
+                          "type": "string",
+                          "example": "Man"
+                        },
+                        "waterRate": {
+                          "type": "number",
+                          "example": 2500
+                        },
+                        "photo": {
+                          "type": "string",
+                          "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+                        }
+                      }
                     }
                   }
                 }
@@ -654,10 +656,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "string",
-                    "example": "5f4a5f6b7e5c7d8f9a6b7c8d"
-                  },
                   "amount": {
                     "type": "number",
                     "example": 2000
@@ -709,7 +707,7 @@
         }
       }
     },
-    "/water/{waterId}": {
+    "/water/{_id}": {
       "get": {
         "tags": [
           "Water"
@@ -750,11 +748,8 @@
                       "example": "Successfully retrieved water records"
                     },
                     "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/water"
-                      }
+                      "type": "object",
+                      "$ref": "#/components/schemas/water"
                     }
                   }
                 }
@@ -802,10 +797,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "string",
-                    "example": "5f4a5f6b7e5c7d8f9a6b7c8d"
-                  },
                   "waterVolume": {
                     "type": "number",
                     "example": 2000
@@ -841,11 +832,8 @@
                       "example": "Successfully retrieved water records"
                     },
                     "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/water"
-                      }
+                      "type": "object",
+                      "$ref": "#/components/schemas/water"
                     }
                   }
                 }
@@ -888,24 +876,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Water record deleted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 204
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Water record deleted successfully"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Water record deleted successfully"
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -982,7 +953,7 @@
         ],
         "summary": "Get monthly water stats",
         "operationId": "getMonthlyStats",
-        "description": "Retrieve mountly water consumption stats for the authenticated user",
+        "description": "Retrieve monthly water consumption stats for the authenticated user",
         "security": [
           {
             "bearerAuth": []
@@ -1008,28 +979,85 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "date": {
-                      "type": "string",
-                      "format": "date",
-                      "example": "2025-02-06T15:17:00.000Z"
+                    "status": {
+                      "type": "integer",
+                      "example": 200
                     },
-                    "waterRecords": {
+                    "message": {
+                      "type": "string",
+                      "example": "Monthly stats retrieved successfully"
+                    },
+                    "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/water"
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-02-07T12:00:00.000Z"
+                          },
+                          "waterRecords": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "_id": {
+                                  "type": "string",
+                                  "example": "67a624a2d90f184f2be933d5"
+                                },
+                                "userId": {
+                                  "type": "string",
+                                  "example": "67a61de6d4bb680f7fe845ab"
+                                },
+                                "waterVolume": {
+                                  "type": "number",
+                                  "example": 4455
+                                },
+                                "date": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2025-02-07T12:00:00.000Z"
+                                },
+                                "time": {
+                                  "type": "string",
+                                  "example": "12:00:00"
+                                },
+                                "totalAmount": {
+                                  "type": "number",
+                                  "example": 0
+                                },
+                                "dailyNorm": {
+                                  "type": "number",
+                                  "example": 2000
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2025-02-07T15:20:02.078Z"
+                                },
+                                "updatedAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2025-02-07T15:20:02.078Z"
+                                }
+                              }
+                            }
+                          },
+                          "totalAmount": {
+                            "type": "number",
+                            "example": 11143
+                          },
+                          "dailyNorm": {
+                            "type": "number",
+                            "example": 4333
+                          },
+                          "percentage": {
+                            "type": "number",
+                            "example": 257
+                          }
+                        }
                       }
-                    },
-                    "totalAmount": {
-                      "type": "number",
-                      "example": 7766
-                    },
-                    "dailyNorm": {
-                      "type": "number",
-                      "example": 2500
-                    },
-                    "percentage": {
-                      "type": "number",
-                      "example": 89
                     }
                   }
                 }

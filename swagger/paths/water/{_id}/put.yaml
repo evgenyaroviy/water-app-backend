@@ -19,9 +19,6 @@ requestBody:
       schema:
         type: object
         properties:
-          userId:
-            type: string
-            example: 5f4a5f6b7e5c7d8f9a6b7c8d
           waterVolume:
             type: number
             example: 2000
@@ -47,10 +44,8 @@ responses:
               type: string
               example: Successfully retrieved water records
             data:
-              type: array
-              items:
-                type: object
-                $ref: '../../../components/schemas/water.yaml'
+              type: object
+              $ref: '../../../components/schemas/water.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
   '401':
