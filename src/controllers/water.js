@@ -25,7 +25,7 @@ const getAllWater = async (req, res) => {
 const addWater = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const { amount, date } = req.body;
+    const { amount, date, time } = req.body;
 
     if (!userId) {
       return res.status(401).json({
@@ -41,13 +41,14 @@ const addWater = async (req, res, next) => {
       });
     }
 
-    const waterDate = date ? new Date(date) : new Date();
-    const time = waterDate.toLocaleTimeString('en-US', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
+    let waterDate;
+    if (date && time) {
+      const [hours, minutes] = time.split(':').map(Number);
+      waterDate = new Date(date);
+      waterDate.setHours(hours, minutes, 0, 0);
+    } else {
+      waterDate = new Date();
+    }
 
     try {
       const waterRecord = await Water.create({
