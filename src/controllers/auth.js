@@ -74,7 +74,6 @@ export const requestResetTokenController = async (req, res) => {
   res.json({
     message: 'Reset password email was successfully sent',
     status: 200,
-    data: {},
   });
 };
 
