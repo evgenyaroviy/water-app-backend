@@ -67,7 +67,7 @@
         },
         "responses": {
           "201": {
-            "description": "Successfully registered a user",
+            "description": "Successfully registered and logged in a user",
             "content": {
               "application/json": {
                 "schema": {
@@ -79,7 +79,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully registered a user!"
+                      "example": "Successfully registered and logged in a user!"
                     },
                     "data": {
                       "type": "object",
@@ -91,6 +91,14 @@
                         "email": {
                           "type": "string",
                           "example": "johndoe@example.com"
+                        },
+                        "accessToken": {
+                          "type": "string",
+                          "example": "MN5FsJaQVHgPsebJpGslokTgJG091Bk0+N+crjJ8"
+                        },
+                        "refreshToken": {
+                          "type": "string",
+                          "example": "0e541234567890abcdef1234567890abcdef"
                         }
                       }
                     }

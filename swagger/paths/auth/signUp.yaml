@@ -22,7 +22,7 @@ requestBody:
           - password
 responses:
   '201':
-    description: Successfully registered a user
+    description: Successfully registered and logged in a user
     content:
       application/json:
         schema:
@@ -33,7 +33,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully registered a user!
+              example: Successfully registered and logged in a user!
             data:
               type: object
               properties:
@@ -43,6 +43,12 @@ responses:
                 email:
                   type: string
                   example: johndoe@example.com
+                accessToken:
+                  type: string
+                  example: MN5FsJaQVHgPsebJpGslokTgJG091Bk0+N+crjJ8
+                refreshToken:
+                  type: string
+                  example: 0e541234567890abcdef1234567890abcdef
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':
