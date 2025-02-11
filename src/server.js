@@ -28,7 +28,7 @@ export const setupServer = () => {
           scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
           styleSrc: ["'self'", "'unsafe-inline'"],
           imgSrc: ["'self'", 'data:', 'https:'],
-          connectSrc: ["'self'", 'https:'],
+          connectSrc: ["'self'", 'https:', 'https://drinkly-ten.vercel.app'],
         },
       },
       crossOriginEmbedderPolicy: true,
@@ -51,7 +51,12 @@ export const setupServer = () => {
     }),
   );
 
-  const corsMiddleware = cors();
+  const corsMiddleware = cors({
+    origin: 'https://drinkly-ten.vercel.app',
+    credentials: true,
+    methods: 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
   app.use(express.json());
   app.use(express.static('uploads'));
   app.use(cookieParser());
