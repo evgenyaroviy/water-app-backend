@@ -36,7 +36,7 @@ export const registerUserController = async (req, res) => {
         id: user._id,
         email: user.email,
         accessToken: session.accessToken,
-        refreshToken: session.refreshToken,
+        // refreshToken: session.refreshToken,
       },
     });
   } catch (error) {

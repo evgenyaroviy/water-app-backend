@@ -46,15 +46,12 @@ responses:
                 accessToken:
                   type: string
                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-                user:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: 60d21b4667d0d8992e610c85
-                #     email:
-                #       type: string
-                #       example: johndoe@example.com
+                userId:
+                  type: string
+                  example: 60d21b4667d0d8992e610c85
+          #     email:
+          #       type: string
+          #       example: johndoe@example.com
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':

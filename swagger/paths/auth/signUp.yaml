@@ -46,9 +46,9 @@ responses:
                 accessToken:
                   type: string
                   example: MN5FsJaQVHgPsebJpGslokTgJG091Bk0+N+crjJ8
-                refreshToken:
-                  type: string
-                  example: 0e541234567890abcdef1234567890abcdef
+                # refreshToken:
+                  # type: string
+                  # example: 0e541234567890abcdef1234567890abcdef
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':
