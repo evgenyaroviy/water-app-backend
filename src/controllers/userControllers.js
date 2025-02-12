@@ -68,7 +68,6 @@ export const updateUserController = async (req, res, next) => {
       data: user,
     });
   } catch (error) {
-    console.error('Update user error:', error);
     next(error);
   }
 };
@@ -76,10 +75,8 @@ export const updateUserController = async (req, res, next) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Login attempt:', { email }); // Отладка
 
     const user = await User.findOne({ email });
-    console.log('User found:', !!user); // Отладка
 
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({
@@ -90,7 +87,6 @@ export const login = async (req, res) => {
 
     const accessToken = generateAccessToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
-    console.log('Tokens generated'); // Отладка
 
     const sessionData = {
       userId: user._id,
@@ -99,11 +95,9 @@ export const login = async (req, res) => {
       accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000),
       refreshTokenValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     };
-    console.log('Session data:', sessionData); // Отладка
 
     const session = new Session(sessionData);
     await session.save();
-    console.log('Session saved'); // Отладка
 
     return res.status(200).json({
       status: 200,
@@ -118,7 +112,6 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Login error:', error); // Отладка
     return res.status(500).json({
       status: 500,
       message: 'Something went wrong',
