@@ -40,7 +40,6 @@ const waterSchema = new Schema(
 
 waterSchema.post('save', function (error, doc, next) {
   if (error) {
-    console.error('Water save error:', error);
     next(error);
   } else {
     next();
@@ -49,7 +48,6 @@ waterSchema.post('save', function (error, doc, next) {
 
 waterSchema.post('findOneAndUpdate', function (error, doc, next) {
   if (error) {
-    console.error('Water update error:', error);
     next(error);
   } else {
     next();

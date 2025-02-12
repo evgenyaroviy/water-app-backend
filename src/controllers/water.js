@@ -70,7 +70,6 @@ const addWater = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.error('Error in addWater:', error);
     return res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -128,7 +127,6 @@ const updateWater = async (req, res) => {
       data: updatedWater,
     });
   } catch (error) {
-    console.error('Update water error:', error);
     res.status(500).json({
       status: 500,
       message: 'Something went wrong',
@@ -143,8 +141,7 @@ const updateWater = async (req, res) => {
 const deleteWater = async (req, res) => {
   try {
     const { waterId } = req.params;
-    console.log(waterId);
-    
+
     const water = await Water.findOneAndDelete({
       _id: waterId,
       userId: req.user.id,
@@ -303,7 +300,6 @@ const updateDailyNorm = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Update daily norm error:', error);
     return res.status(error.status || 500).json({
       status: error.status || 500,
       message: error.status === 400 ? error.message : 'Something went wrong',
@@ -332,7 +328,6 @@ const getWaterById = async (req, res) => {
       data: water,
     });
   } catch (error) {
-    console.error('Get water by id error:', error);
     res.status(500).json({
       status: 500,
       message: 'Something went wrong',
