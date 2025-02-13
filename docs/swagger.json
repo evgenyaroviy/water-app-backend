@@ -106,8 +106,8 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
-          "404": {
-            "$ref": "#/components/responses/404"
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -195,7 +195,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -224,7 +224,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -299,7 +299,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -356,7 +356,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -417,7 +417,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -472,7 +472,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -590,7 +590,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "$ref": "#/components/responses/404User"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1242,6 +1242,43 @@
           }
         }
       },
+      "409": {
+        "description": "Email in use",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email in use"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email in use"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "500": {
         "description": "Internal Server Error",
         "content": {
@@ -1267,6 +1304,43 @@
                     "message": {
                       "type": "string",
                       "example": "An unexpected error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404User": {
+        "description": "Not Found error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User not found"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
                     }
                   }
                 }
